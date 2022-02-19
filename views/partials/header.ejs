@@ -60,17 +60,28 @@
     .editors {
         display: flex;
         height: 50%;
+        /* width: 100%; */
+        overflow: auto;
     }
 
     .editor {
         width: 100%;
     }
 
-    #page {
+    .page,
+    .page iframe {
         width: 100%;
+    }
+
+    .page {
         height: 50%;
         border: none;
         display: flex;
+    }
+
+    .page iframe {
+        height: 100%;
+        border: none;
     }
 
     .overlay {

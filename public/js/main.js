@@ -1,74 +1,123 @@
 const defaultOptions = {
-  theme: 'monokai',
+  theme: "monokai",
   lineNumbers: true,
-}
+  gutters: ["CodeMirror-lint-markers"],
+  lint: true,
+};
 
-const editorHtml = CodeMirror(
-  document.querySelector('#editor-html'),
-  {
-    ...defaultOptions,
-    value: '<!-- <div></div> -->',
-    mode: 'xml',
-    matchTags: true,
-    autoCloseTags: true,
-  }
-)
+let lastValue = {
+  html: "",
+  css: "",
+  js: "",
+};
 
-editorHtml.on('change', () => {
-    onChange()
-})
+let lock = false;
 
-const editorCss = CodeMirror(
-  document.querySelector('#editor-css'),
-  {
-    ...defaultOptions,
-    value: `/* div {
+const editorHtml = CodeMirror(document.querySelector("#editor-html"), {
+  ...defaultOptions,
+  value: "<div>div</div>",
+  mode: "xml",
+  matchTags: true,
+  autoCloseTags: true,
+});
+
+editorHtml.on("change", () => {
+  onChange();
+});
+
+lastValue.html = editorHtml.getValue();
+
+const editorCss = CodeMirror(document.querySelector("#editor-css"), {
+  ...defaultOptions,
+  value: `div {
   color: blue;
-} */`,
-    mode: 'css',
-    matchBrackets: true,
-    autoCloseBrackets: true,
-  }
-)
-editorCss.on('change', () => {
-    onChange()
-})
+}`,
+  mode: "css",
+  matchBrackets: true,
+  autoCloseBrackets: true,
+});
+editorCss.on("change", () => {
+  onChange();
+});
 
-const editorJs = CodeMirror(
-  document.querySelector('#editor-js'),
-  {
-    ...defaultOptions,
-    placeholder: document.querySelector('#placeholder-js'),
-    value: '// console.log(\'foo\')',
-    mode: 'javascript',
-    matchBrackets: true,
-    autoCloseBrackets: true,
-    lint: {options: {esversion: 2021}},
-  }
-)
-editorJs.on('change', () => {
-    onChange()
-})
+lastValue.css = editorCss.getValue();
+
+const editorJs = CodeMirror(document.querySelector("#editor-js"), {
+  ...defaultOptions,
+  placeholder: document.querySelector("#placeholder-js"),
+  value: "console.log('foo')",
+  mode: "javascript",
+  matchBrackets: true,
+  autoCloseBrackets: true,
+  lint: { options: { esversion: 2021 } },
+});
+editorJs.on("change", () => {
+  onChange(true);
+});
+
+lastValue.js = editorJs.getValue();
+
+onChange();
 
 function applyToIframe(html, css, js) {
-    const iframe = document.querySelector('iframe')
-    const template = getTemplate(html, css, js)
+  let error = "";
 
-    iframe.contentWindow.document.open()
-    iframe.contentWindow.document.write(template)
-    iframe.contentWindow.document.close()
+  try {
+    const log = console.log;
+    console.log = () => {};
+    eval(js);
+    console.log = log;
+  } catch (e) {
+    error = e;
+  }
+
+  if (isRunnable(error)) {
+    console.log("running");
+    const iframe = document.querySelector("iframe");
+    let first;
+
+    iframe?.remove();
+
+    const wrapper = document.querySelector(".page");
+
+    const newIframe = document.createElement("iframe");
+    const template = getTemplate(html, css, js);
+
+    wrapper.innerHTML = "";
+    wrapper.appendChild(newIframe);
+
+    newIframe?.contentWindow?.document.open();
+    newIframe?.contentWindow?.document.write(template);
+    newIframe?.contentWindow?.document.close();
+  }
 }
 
-function onChange() {
-    const html = editorHtml.getValue()
-    const css = editorCss.getValue()
-    const js = editorJs.getValue()
+function onChange(isJs = false) {
+  const html = editorHtml.getValue().trim();
+  const hasChangedHtml = html !== lastValue.html;
+  if (hasChangedHtml) {
+    lastValue.html = html.trim();
+  }
 
-    applyToIframe(html, css, js)
+  const css = editorCss.getValue().trim();
+  const hasChangedCss = css !== lastValue.css;
+  if (hasChangedCss) {
+    lastValue.css = css.trim();
+  }
+
+  let js = editorJs.getValue().trim();
+  const hasChangedJs = js !== lastValue.js;
+  if (hasChangedJs) {
+    lastValue.js = js.trim();
+  } else {
+    js = "";
+  }
+
+  applyToIframe(html, css, js);
 }
 
-function getTemplate(html = '', css = '', js = '') {
-    const result = `
+function getTemplate(html = "", css = "", js = "") {
+  const result = `
     <!DOCTYPE html>
     <html>
         <head>
@@ -83,9 +132,22 @@ function getTemplate(html = '', css = '', js = '') {
                 ${js}
             </script>
         </body>
-    </html>`
+    </html>`;
 
-    return result
+  return result;
+}
+
+function isRunnable(error) {
+  if (!error) {
+    return true;
+  }
+
+  // return (
+  //   !error.includes("ReferenceError: c is not defined") ||
+  //   !error.includes("ReferenceError: co is not defined") ||
+  //   !error.includes("ReferenceError: con is not defined") ||
+  //   !error.includes("ReferenceError: cons is not defined")
+  // );
 }
 
 // <style>

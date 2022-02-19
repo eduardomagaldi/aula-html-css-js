@@ -1,10 +1,4 @@
-
-
-
-
-
 console.log('createUUID()', createUUID())
-
 
 function createUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -47,8 +41,6 @@ input.value = suggestedName
 const form = document.querySelector('.overlay')
 form.addEventListener('submit', (e) => {
   e.preventDefault()
-  console.log('e', e)
-
   form.classList.add('hide')
 
   setTimeout(() => {
