@@ -1,68 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%- include
-        ("../partials/header.ejs")
-        %>
+    <%- include ("../partials/header.ejs") %>
   </head>
 
   <body>
-    <div class="wrapper">
-      <div class="editors">
-        <div id="editor-html"
-            class="editor"></div>
-        <div id="editor-css"
-            class="editor"></div>
-        <div id="editor-js"
-            class="editor"></div>
-      </div>
-
-      <div class="page"></div>
+    <div id="aaa" class="wrapper">
+      <!-- <div id="server-time"></div> -->
     </div>
 
-    <form class="overlay">
+    <div id="bbb" class="wrapper"></div>
+
+    <!-- <form class="overlay">
       <label class="label">Nome:</label>
-      <input type="text"
-          class="input">
-      <button class="button"
-          type="submit">Iniciar</button>
-    </form>
+      <input type="text" class="input" id="name" />
+      <button class="button" type="submit">Iniciar</button>
+    </form> -->
 
-    <script type="text/javascript"
-        src="/js/codemirror.js"></script>
+    <script type="text/javascript" src="/js/codemirror.js"></script>
 
-    <script type="text/javascript"
-        src="/js/mode/javascript.js"></script>
-    <script type="text/javascript"
-        src="/js/mode/css.js"></script>
-    <script type="text/javascript"
-        src="/js/mode/xml.js"></script>
+    <script type="text/javascript" src="/js/mode/javascript.js"></script>
+    <script type="text/javascript" src="/js/mode/css.js"></script>
+    <script type="text/javascript" src="/js/mode/xml.js"></script>
 
     <!-- <script type="text/javascript"
         src="/js/placeholder.js"></script> -->
 
-    <script type="text/javascript"
-        src="/js/addons/matchbrackets.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/closebrackets.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/xml-fold.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/matchtags.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/closetag.js"></script>
-
+    <script type="text/javascript" src="/js/addons/matchbrackets.js"></script>
+    <script type="text/javascript" src="/js/addons/closebrackets.js"></script>
+    <script type="text/javascript" src="/js/addons/xml-fold.js"></script>
+    <script type="text/javascript" src="/js/addons/matchtags.js"></script>
+    <script type="text/javascript" src="/js/addons/closetag.js"></script>
 
     <script src="https://unpkg.com/jshint@2.13.2/dist/jshint.js"></script>
     <script src="https://unpkg.com/csslint@1.0.5/dist/csslint.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/lint.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/html-lint.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/css-lint.js"></script>
-    <script type="text/javascript"
-        src="/js/addons/javascript-lint.js"></script>
+    <script type="text/javascript" src="/js/addons/lint.js"></script>
+    <script type="text/javascript" src="/js/addons/html-lint.js"></script>
+    <script type="text/javascript" src="/js/addons/css-lint.js"></script>
+    <script type="text/javascript" src="/js/addons/javascript-lint.js"></script>
 
     <!-- <script type="text/javascript"
         src="/js/addons/show-hint.js"></script>
@@ -71,9 +46,7 @@
     <script type="text/javascript"
         src="/js/addons/html-hint.js"></script> -->
 
-    <script type="text/javascript"
-        src="/js/init.js"></script>
-    <script type="text/javascript"
-        src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/init.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
   </body>
 </html>

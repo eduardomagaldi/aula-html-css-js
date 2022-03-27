@@ -1,8 +1,6 @@
-<title>Node.js Getting Started on Heroku</title>
+<title>Plataforma de aula</title>
 
-<link rel="icon"
-    type="image/x-icon"
-    href="/favicon.png">
+<link rel="icon" type="image/x-icon" href="/favicon.png" />
 
 <!-- <script type="text/javascript"
     src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -11,124 +9,139 @@
 <!-- <script type="text/javascript"
     src="../node_modules/codemirror/lib/codemirror.js"></script> -->
 
-<link rel="stylesheet"
-    type="text/css"
-    href="/css/codemirror.css" />
-<link rel="stylesheet"
-    type="text/css"
-    href="/css/normalize.css" />
-<link rel="stylesheet"
-    type="text/css"
-    href="/css/monokai.css" />
+<link rel="stylesheet" type="text/css" href="/css/codemirror.css" />
+<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="/css/monokai.css" />
 <!-- <link rel="stylesheet"
     type="text/css"
     href="/css/show-hint.css" /> -->
-<link rel="stylesheet"
-    type="text/css"
-    href="/css/lint.css" />
+<link rel="stylesheet" type="text/css" href="/css/lint.css" />
 
 <style>
-    .CodeMirror-gutter {
-        background: #585a4d;
-    }
+  .CodeMirror-gutter {
+    background: #585a4d;
+  }
 
-    .cm-s-monokai .CodeMirror-linenumber {
-        color: #202020;
-    }
+  .cm-s-monokai .CodeMirror-linenumber {
+    color: #202020;
+  }
 
-    .CodeMirror {
-        max-width: 100%;
-        font-size: 15px;
-    }
+  .CodeMirror {
+    max-width: 100%;
+    font-size: 15px;
+  }
 
-    body,
-    html {
-        height: 100%;
-    }
+  body,
+  html {
+    height: 100%;
+  }
 
-    body {
-        position: relative;
-        font-family: sans-serif;
-        color: white;
-    }
+  body {
+    position: relative;
+    font-family: sans-serif;
+    color: white;
+    color: blue;
+    display: flex;
+  }
 
-    .wrapper,
-    .CodeMirror {
-        height: 100%;
-    }
+  .wrapper {
+    width: 100%;
+    min-width: 100%;
+  }
 
-    .editors {
-        display: flex;
-        height: 50%;
-        /* width: 100%; */
-        overflow: auto;
-    }
+  .wrapper,
+  .CodeMirror {
+    height: 100%;
+  }
 
-    .editor {
-        width: 100%;
-    }
+  .editors {
+    display: flex;
+    height: 50%;
+    /* width: 100%; */
+    overflow: auto;
+  }
 
-    .page,
-    .page iframe {
-        width: 100%;
-    }
+  .editor {
+    /* width: 100%; */
+    width: 33.33333333333%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 
-    .page {
-        height: 50%;
-        border: none;
-        display: flex;
-    }
+  .page,
+  .page iframe {
+    width: 100%;
+  }
 
-    .page iframe {
-        height: 100%;
-        border: none;
-    }
+  .page {
+    height: 50%;
+    border: none;
+    display: flex;
+    background-color: white;
+  }
 
-    .overlay {
-        background: rgba(0, 0, 0, .7);
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(5px);
-        transition: opacity .3s;
-    }
+  .page iframe {
+    height: 100%;
+    border: none;
+  }
 
-    .hide {
-        opacity: 0;
-    }
+  .overlay {
+    background: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s;
+  }
 
-    .d-none {
-        display: none;
-    }
+  .hide {
+    opacity: 0;
+  }
 
-    .input,
-    .button {
-        padding: 10px;
-        background-color: rgb(75, 75, 75);
-        border-radius: 5px 0 0 5px;
-        color: white;
-        border: 1px solid rgb(175, 175, 175);
-        outline: none;
-    }
+  .d-none {
+    display: none;
+  }
 
-    .button {
-        border-radius: 0 5px 5px 0;
-        border-left: none;
-        background-color: rgb(95, 95, 255);
-        cursor: pointer;
-        transition: background-color .3s;
-    }
+  .input,
+  .button {
+    padding: 10px;
+    background-color: rgb(75, 75, 75);
+    border-radius: 5px 0 0 5px;
+    color: white;
+    border: 1px solid rgb(175, 175, 175);
+    outline: none;
+  }
 
-    .button:hover {
-        background-color: rgb(143, 143, 255);
-    }
+  .button {
+    border-radius: 0 5px 5px 0;
+    border-left: none;
+    background-color: rgb(95, 95, 255);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-    .label {
-        margin-right: 10px;
-    }
+  .button:hover {
+    background-color: rgb(143, 143, 255);
+  }
+
+  .label {
+    margin-right: 10px;
+  }
+
+  #server-time {
+    background: blue;
+  }
+
+  .wrapper {
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: grey;
+    border: 1px solid black;
+  }
 </style>
