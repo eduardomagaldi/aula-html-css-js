@@ -14,20 +14,19 @@ const server = express()
 const wss = new Server({ server })
 
 wss.on('connection', (ws) => {
-    console.log('Client connected')
+    // console.log('Client connected', ws)
 
     ws.on('message', (data) => {
-        console.log('wss.clients', wss.clients.length)
-        wss.clients.forEach((client) => {
-            client.send(data)
-        })
+        if (wss.clients.size) {
+            wss.clients.forEach((client, i) => {
+                client.send(data)
+            })
+        }
     })
 
     ws.on('error', (error) => {
         console.log('error', error)
     })
-
-    console.log(`onConnection`)
 
     ws.on('close', () => console.log('Client disconnected'))
 })

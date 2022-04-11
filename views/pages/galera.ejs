@@ -1,74 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head> </head>
+    <head>
+        <%- include ("../partials/header.ejs") %>
+
+        <link rel="icon" type="image/x-icon" href="/galere.png" />
+    </head>
 
     <body>
-        <!-- <div id="wrapper1" class="wrapper"></div>
-    <div id="wrapper2" class="wrapper"></div>
+        <%- include ("../partials/scripts.ejs") %>
 
-    <div id="server-time"></div>
-
-    <script type="text/javascript" src="/js/codemirror.js"></script>
-
-    <script type="text/javascript" src="/js/mode/javascript.js"></script>
-    <script type="text/javascript" src="/js/mode/css.js"></script>
-    <script type="text/javascript" src="/js/mode/xml.js"></script>
-
-    <script type="text/javascript" src="/js/addons/matchbrackets.js"></script>
-    <script type="text/javascript" src="/js/addons/closebrackets.js"></script>
-    <script type="text/javascript" src="/js/addons/xml-fold.js"></script>
-    <script type="text/javascript" src="/js/addons/matchtags.js"></script>
-    <script type="text/javascript" src="/js/addons/closetag.js"></script>
-
-    <script src="https://unpkg.com/jshint@2.13.2/dist/jshint.js"></script>
-    <script src="https://unpkg.com/csslint@1.0.5/dist/csslint.js"></script>
-    <script type="text/javascript" src="/js/addons/lint.js"></script>
-    <script type="text/javascript" src="/js/addons/html-lint.js"></script>
-    <script type="text/javascript" src="/js/addons/css-lint.js"></script>
-    <script type="text/javascript" src="/js/addons/javascript-lint.js"></script> -->
-
+        <script type="text/javascript" src="/js/storage.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
         <script>
             const HOST = location.origin.replace(/^http/, 'ws')
             window.ws = new WebSocket(HOST)
             window.ws.onmessage = function (event) {
-                // console.log('event', event)
-                // document
-                //     .querySelector('body')
-                //     .appendChild(
-                //         document.createTextNode(
-                //             'Server time: ' + Blob.text(event.data) + '\n',
-                //         ),
-                //     )
-
-                // const blb = new Blob(['Lorem ipsum sit'], {
-                //     type: 'text/plain',
-                // })
                 const blb = event.data
                 const reader = new FileReader()
 
-                // This fires after the blob has been read/loaded.
                 reader.addEventListener('loadend', (e) => {
                     const text = e.srcElement.result
                     const json = JSON.parse(text)
-                    console.log('json', json)
+
+                    const el = document.querySelector('#j' + json.uuid)
+
+                    if (!el) {
+                        const elem = createElement('div#j' + json.uuid)
+                        elem.classList.add('wrapper')
+                        document.body.appendChild(elem)
+                    } else {
+                        el.innerHTML = ''
+                    }
+
+                    createCodeEnv('#j' + json.uuid, json, true)
                 })
 
-                // Start reading the blob as text.
                 reader.readAsText(blb)
             }
         </script>
-
-        <!-- <script type="text/javascript" src="/js/main.js"></script> -->
 
         <style>
             .wrapper {
                 padding: 50px;
             }
         </style>
-        <!--
-    <script>
-      createCodeEnv("#wrapper1");
-      createCodeEnv("#wrapper2");
-    </script> -->
     </body>
 </html>

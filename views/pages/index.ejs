@@ -7,60 +7,29 @@
     <body>
         <div id="wrapper" class="wrapper"></div>
 
-        <form class="overlay">
+        <form class="overlay hide d-none">
             <label class="label">Nome:</label>
             <input type="text" class="input" id="name" />
             <button class="button" type="submit">Iniciar</button>
         </form>
 
-        <script type="text/javascript" src="/js/codemirror.js"></script>
-
-        <script type="text/javascript" src="/js/mode/javascript.js"></script>
-        <script type="text/javascript" src="/js/mode/css.js"></script>
-        <script type="text/javascript" src="/js/mode/xml.js"></script>
-
-        <script
-            type="text/javascript"
-            src="/js/addons/matchbrackets.js"
-        ></script>
-        <script
-            type="text/javascript"
-            src="/js/addons/closebrackets.js"
-        ></script>
-        <script type="text/javascript" src="/js/addons/xml-fold.js"></script>
-        <script type="text/javascript" src="/js/addons/matchtags.js"></script>
-        <script type="text/javascript" src="/js/addons/closetag.js"></script>
-
-        <script src="https://unpkg.com/jshint@2.13.2/dist/jshint.js"></script>
-        <script src="https://unpkg.com/csslint@1.0.5/dist/csslint.js"></script>
-        <script type="text/javascript" src="/js/addons/lint.js"></script>
-        <script type="text/javascript" src="/js/addons/html-lint.js"></script>
-        <script type="text/javascript" src="/js/addons/css-lint.js"></script>
-        <script
-            type="text/javascript"
-            src="/js/addons/javascript-lint.js"
-        ></script>
+        <%- include ("../partials/scripts.ejs") %>
 
         <script type="text/javascript" src="/js/init.js"></script>
+        <script type="text/javascript" src="/js/storage.js"></script>
         <script>
-            init()
+            if (!get('name')) {
+                init()
+            }
         </script>
 
         <script>
             const HOST = location.origin.replace(/^http/, 'ws')
             window.ws = new WebSocket(HOST)
-            // window.ws.onmessage = function (event) {
-            //   console.log("Server time: " + event.data);
-            // };
         </script>
-        <script type="text/javascript" src="/js/createElement.js"></script>
-        <script type="text/javascript" src="/js/storage.js"></script>
-        <script type="text/javascript" src="/js/main.js"></script>
 
         <script>
-            createCodeEnv('#wrapper')
-
-            // console.log('bla', bla)
+            createCodeEnv('#wrapper', {})
         </script>
     </body>
 </html>

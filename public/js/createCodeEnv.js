@@ -1,69 +1,71 @@
-function createCodeEnv(wrapperSelector) {
+function createCodeEnv(wrapperSelector, { html, css, js }, silent) {
     const wrapper = document.querySelector(wrapperSelector)
     if (!wrapper) return
 
     createHtml(wrapper)
-
-    let lastValue = {
-        html: '',
-        css: '',
-        js: '',
-    }
+    console.log('createCodeEnv')
 
     const editorArray = [
         createEditor(
             {
                 type: 'html',
-                value: '<div>div</div>',
+                value: html ?? '<div>div</div>',
                 mode: 'xml',
             },
-            lastValue,
             wrapper,
         ),
         createEditor(
             {
                 type: 'css',
-                value: `div {
+                value:
+                    css ??
+                    `div {
   color: blue;
 }`,
                 mode: 'css',
             },
-            lastValue,
             wrapper,
         ),
-        createEditor(
-            {
-                type: 'js',
-                value: `console.log('foo');`,
-                mode: 'javascript',
-            },
-            lastValue,
-            wrapper,
-        ),
+        // createEditor(
+        //     {
+        //         type: 'js',
+        //         value: js ?? `console.log('foo');`,
+        //         mode: 'javascript',
+        //     },
+        //     wrapper,
+        // ),
     ]
 
-    editorArray.forEach((editor) => {
-        lastValue[editor.type] = editor.getValue()
+    console.log('createCodeEnv')
+    console.log('silent', silent)
 
-        editor.on('change', () => {
-            onChange(editor.type, editorArray, lastValue, wrapper)
+    if (!silent) {
+        console.log('silent', silent)
+        editorArray.forEach((editor) => {
+            save(editor.type, editor.getValue())
+
+            editor.on('change', () => {
+                onChange(editor.type, editorArray, wrapper)
+            })
         })
-    })
 
-    onChange('html', editorArray, lastValue, wrapper)
-    onChange('css', editorArray, lastValue, wrapper)
-    onChange('js', editorArray, lastValue, wrapper)
+        onChange('html', editorArray, wrapper)
+        onChange('css', editorArray, wrapper)
+        onChange('js', editorArray, wrapper)
+    }
 }
 
-function onChange(type, editorArray, lastValue, wrapper) {
+function onChange(type, editorArray, wrapper) {
     const values = []
 
     editorArray.forEach((editor) => {
         const value = editor.getValue().trim()
         values.push(value)
-        const hasChanged = value !== lastValue[type]
+        const type = editor.type
+        const lastValue = get(type)
+        const hasChanged = value !== lastValue
         if (hasChanged) {
-            lastValue[type] = value
+            save(type, value)
         }
     })
 
@@ -71,24 +73,50 @@ function onChange(type, editorArray, lastValue, wrapper) {
 
     const [html, css, js] = values
     const uuid = get('uuid')
-    sendMessage({ uuid, html, css, js })
+    const name = get('name')
+    sendMessage({ name, uuid, html, css, js })
 }
 
 function createHtml(wrapper) {
     const div = document.createElement('div')
-    div.setAttribute('class', 'editors')
+    div.setAttribute('class', 'wrapper-header')
+
+    const header = createElement('div.header')
+    header.appendChild(createElement('span.name', get('name') || '_'))
+    // const a = createElement('a', 'Galera')
+
+    // console.log('a', a)
+
+    // a.setAttribute('href', '/galera')
+
+    const createA = document.createElement('a')
+    const createAText = document.createTextNode('Galera')
+    createA.setAttribute('href', '/galera')
+    createA.setAttribute('target', '_blank')
+    createA.appendChild(createAText)
+    header.appendChild(createA)
+
+    div.appendChild(header)
+
+    const div2 = document.createElement('div')
+    div2.setAttribute('class', 'editors')
 
     const editorHtml = createElement('div.editor-html.editor')
-    div.appendChild(editorHtml)
+    div2.appendChild(editorHtml)
 
     const editorCss = createElement('div.editor-css.editor')
-    div.appendChild(editorCss)
+    div2.appendChild(editorCss)
+
+    div.appendChild(div2)
 
     wrapper.appendChild(div)
     wrapper.appendChild(createElement('div.page'))
 }
 
-function createEditor({ type, value, mode }, lastValue, wrapper) {
+function createEditor({ type, value, mode }, wrapper) {
+    console.log('type', type)
+    console.log('value', value)
+
     const defaultOptions = {
         theme: 'monokai',
         lineNumbers: true,
@@ -110,12 +138,14 @@ function createEditor({ type, value, mode }, lastValue, wrapper) {
 }
 
 function applyToIframe(type, editorArray, wrapper) {
+    console.log('applyToIframe')
+
     let error = ''
     const [editorHtml, editorCss, editorJs] = editorArray
-    let [html, css, js] = [
+    let [html, css] = [
         editorHtml.getValue().trim(),
         editorCss.getValue().trim(),
-        editorJs.getValue().trim(),
+        // editorJs.getValue().trim(),
     ]
 
     if (type === 'js') {
@@ -131,6 +161,8 @@ function applyToIframe(type, editorArray, wrapper) {
         js = ''
     }
 
+    console.log('out if')
+
     if (isRunnable(error)) {
         if (window.location.host.includes('localhost')) {
             console.log('====================================')
@@ -143,6 +175,9 @@ function applyToIframe(type, editorArray, wrapper) {
         iframe?.remove()
 
         const wrapperPage = wrapper.querySelector('.page')
+
+        console.log('wrapperPage', wrapperPage)
+
         const newIframe = document.createElement('iframe')
         const template = getTemplate(html, css, js)
 
@@ -154,10 +189,6 @@ function applyToIframe(type, editorArray, wrapper) {
         newIframe?.contentWindow?.document.close()
     }
 }
-
-// setInterval(() => {
-//   sendMessage({});
-// }, 1);
 
 function sendMessage(json) {
     console.log('sendMessage', !!window.ws, window.ws?.readyState)

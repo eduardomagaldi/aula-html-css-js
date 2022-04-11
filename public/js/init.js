@@ -8,17 +8,18 @@ function init() {
     input.value = suggestedName
 
     const form = document.querySelector('.overlay')
+    form.classList.remove('hide')
+    form.classList.remove('d-none')
+
     form.addEventListener('submit', (e) => {
         e.preventDefault()
+
         form.classList.add('hide')
 
         const input = document.querySelector('#name').value
 
         let name = get('name')
-        if (!name) {
-            save('name', input)
-            uuid = get('uuid')
-        }
+        save('name', input)
 
         let uuid = get('uuid')
         if (!uuid) {
