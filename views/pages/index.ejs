@@ -17,11 +17,6 @@
 
         <script type="text/javascript" src="/js/init.js"></script>
         <script type="text/javascript" src="/js/storage.js"></script>
-        <script>
-            if (!get('name')) {
-                init()
-            }
-        </script>
 
         <script>
             const HOST = location.origin.replace(/^http/, 'ws')
@@ -29,7 +24,14 @@
         </script>
 
         <script>
-            createCodeEnv('#wrapper', {})
+            const name = get('name')
+            if (!name) {
+                init(() => {
+                    createCodeEnv('#wrapper', {})
+                })
+            } else {
+                createCodeEnv('#wrapper', { name })
+            }
         </script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-function init() {
+function init(cb) {
     const animais = getAnimals()
 
     const index = getRandomArbitrary(0, animais.length)
@@ -26,6 +26,8 @@ function init() {
             save('uuid', createUUID())
             uuid = get('uuid')
         }
+
+        cb()
 
         setTimeout(() => {
             form.classList.add('d-none')

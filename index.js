@@ -14,7 +14,7 @@ const server = express()
 const wss = new Server({ server })
 
 wss.on('connection', (ws) => {
-    // console.log('Client connected', ws)
+    console.log('Client connected')
 
     ws.on('message', (data) => {
         if (wss.clients.size) {

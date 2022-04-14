@@ -1,9 +1,8 @@
-function createCodeEnv(wrapperSelector, { html, css, js }, silent) {
+function createCodeEnv(wrapperSelector, { html, css, js, name }, silent) {
     const wrapper = document.querySelector(wrapperSelector)
     if (!wrapper) return
 
-    createHtml(wrapper)
-    console.log('createCodeEnv')
+    createHtml(wrapper, name)
 
     const editorArray = [
         createEditor(
@@ -36,11 +35,7 @@ function createCodeEnv(wrapperSelector, { html, css, js }, silent) {
         // ),
     ]
 
-    console.log('createCodeEnv')
-    console.log('silent', silent)
-
     if (!silent) {
-        console.log('silent', silent)
         editorArray.forEach((editor) => {
             save(editor.type, editor.getValue())
 
@@ -48,14 +43,16 @@ function createCodeEnv(wrapperSelector, { html, css, js }, silent) {
                 onChange(editor.type, editorArray, wrapper)
             })
         })
-
-        onChange('html', editorArray, wrapper)
-        onChange('css', editorArray, wrapper)
-        onChange('js', editorArray, wrapper)
     }
+
+    onChange('html', editorArray, wrapper, silent)
+    onChange('css', editorArray, wrapper, silent)
+    onChange('js', editorArray, wrapper, silent)
 }
 
-function onChange(type, editorArray, wrapper) {
+function onChange(type, editorArray, wrapper, silent) {
+    console.log('onChange')
+
     const values = []
 
     editorArray.forEach((editor) => {
@@ -71,18 +68,23 @@ function onChange(type, editorArray, wrapper) {
 
     applyToIframe(type, editorArray, wrapper)
 
-    const [html, css, js] = values
-    const uuid = get('uuid')
-    const name = get('name')
-    sendMessage({ name, uuid, html, css, js })
+    if (!silent) {
+        console.log('not silent')
+
+        const [html, css, js] = values
+        const uuid = get('uuid')
+        const name = get('name')
+
+        sendMessage({ name, uuid, html, css, js })
+    }
 }
 
-function createHtml(wrapper) {
+function createHtml(wrapper, name) {
     const div = document.createElement('div')
     div.setAttribute('class', 'wrapper-header')
 
     const header = createElement('div.header')
-    header.appendChild(createElement('span.name', get('name') || '_'))
+    header.appendChild(createElement('span.name', name))
     // const a = createElement('a', 'Galera')
 
     // console.log('a', a)
@@ -114,8 +116,8 @@ function createHtml(wrapper) {
 }
 
 function createEditor({ type, value, mode }, wrapper) {
-    console.log('type', type)
-    console.log('value', value)
+    // console.log('type', type)
+    // console.log('value', value)
 
     const defaultOptions = {
         theme: 'monokai',
