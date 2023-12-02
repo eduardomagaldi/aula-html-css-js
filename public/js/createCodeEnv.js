@@ -19,8 +19,8 @@ function createCodeEnv(wrapperSelector, { html, css, js, name }, silent) {
                 value:
                     css ??
                     `div {
-  color: blue;
-}`,
+                        color: blue;
+                    }`,
                 mode: 'css',
             },
             wrapper,
@@ -95,6 +95,7 @@ function createHtml(wrapper, name) {
     const createAText = document.createTextNode('Galera')
     createA.setAttribute('href', '/galera')
     createA.setAttribute('target', '_blank')
+    createA.setAttribute('style', 'color: white;')
     createA.appendChild(createAText)
     header.appendChild(createA)
 

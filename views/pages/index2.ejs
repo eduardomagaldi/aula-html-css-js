@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include ("../partials/header.ejs") %>
+    </head>
+
+    <body>
+        <div id="wrapper" class="wrapper"></div>
+
+        <form class="overlay hide d-none">
+            <label class="label">Nome:</label>
+            <input type="text" class="input" id="name" />
+            <button class="button" type="submit">Iniciar</button>
+        </form>
+
+        <%- include ("../partials/scripts.ejs") %>
+
+        <script type="text/javascript" src="/js/init.js"></script>
+        <script type="text/javascript" src="/js/storage.js"></script>
+
+        <script>
+            const HOST = location.origin.replace(/^http/, 'ws')
+            window.ws = new WebSocket(HOST)
+        </script>
+
+        <script>
+            const name = get('name')
+            if (!name) {
+                init(() => {
+                    createCodeEnv('#wrapper', {})
+                })
+            } else {
+                createCodeEnv('#wrapper', { name })
+            }
+        </script>
+    </body>
+</html>
